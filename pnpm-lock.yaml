@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@anthropic-ai/sdk':
+        specifier: ^0.24.0
+        version: 0.24.0(encoding@0.1.13)
       '@langchain/openai':
         specifier: ^0.2.0
         version: 0.2.0(encoding@0.1.13)(langchain@0.2.6(@pinecone-database/pinecone@2.2.2)(encoding@0.1.13)(ignore@5.3.1)(openai@4.52.0(encoding@0.1.13))(ws@8.14.2(bufferutil@4.0.8)(utf-8-validate@6.0.3)))
@@ -87,6 +90,9 @@ packages:
   '@alloc/quick-lru@5.2.0':
     resolution: {integrity: sha512-UrcABB+4bUrFABwbluTIBErXwvbsU/V7TZWfmbgJfbkwiBuziS9gxdODUyuiecfdGQ85jglMW6juS3+z5TsKLw==}
     engines: {node: '>=10'}
+
+  '@anthropic-ai/sdk@0.24.0':
+    resolution: {integrity: sha512-iMb1bQimQrSw/Rq6duPiuCJ7uvlSciq5PWp17jVOfy5dK2EJY36ol10ttwb+Zf6yzkKHMdt+vNIpznj/HsPXOg==}
 
   '@babel/runtime@7.24.7':
     resolution: {integrity: sha512-UwgBRMjJP+xv857DCngvqXI3Iq6J4v0wXmwc6sapg+zyhbwmQX67LUEFrkK5tbyJ30jGuG3ZvWpBiB9LCy1kWw==}
@@ -2538,6 +2544,19 @@ packages:
 snapshots:
 
   '@alloc/quick-lru@5.2.0': {}
+
+  '@anthropic-ai/sdk@0.24.0(encoding@0.1.13)':
+    dependencies:
+      '@types/node': 18.19.39
+      '@types/node-fetch': 2.6.11
+      abort-controller: 3.0.0
+      agentkeepalive: 4.5.0
+      form-data-encoder: 1.7.2
+      formdata-node: 4.4.1
+      node-fetch: 2.7.0(encoding@0.1.13)
+      web-streams-polyfill: 3.3.3
+    transitivePeerDependencies:
+      - encoding
 
   '@babel/runtime@7.24.7':
     dependencies:
