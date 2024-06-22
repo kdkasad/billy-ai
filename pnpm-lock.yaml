@@ -23,6 +23,9 @@ importers:
       '@langchain/openai':
         specifier: ^0.2.0
         version: 0.2.0(encoding@0.1.13)(langchain@0.2.6(@aws-sdk/credential-provider-node@3.600.0(@aws-sdk/client-sso-oidc@3.600.0)(@aws-sdk/client-sts@3.600.0))(@pinecone-database/pinecone@2.2.2)(encoding@0.1.13)(fast-xml-parser@4.2.5)(ignore@5.3.1)(openai@4.52.0(encoding@0.1.13))(ws@8.14.2(bufferutil@4.0.8)(utf-8-validate@6.0.3)))
+      '@next-auth/prisma-adapter':
+        specifier: ^1.0.7
+        version: 1.0.7(@prisma/client@5.15.1(prisma@5.15.1))(next-auth@4.24.7(next@14.2.4(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       '@pinecone-database/pinecone':
         specifier: ^2.2.2
         version: 2.2.2
