@@ -9,16 +9,17 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@langchain/openai": "^0.2.0",
+    "@pinecone-database/pinecone": "^2.2.2",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-popover": "^1.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "cmdk": "^1.0.0",
-    "@langchain/openai": "^0.2.0",
-    "@pinecone-database/pinecone": "^2.2.2",
     "langchain": "^0.2.6",
     "next": "14.2.4",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@types/node": "^20",
