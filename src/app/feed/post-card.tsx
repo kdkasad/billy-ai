@@ -36,7 +36,13 @@ export default function PostCard(props: PostCardProps) {
       />
       <Link href={`/posts/${props.id}`}>
         <div className="space-y-3">
-          <div className="text-xl font-bold">{props.title}</div>
+          <div className="flex items-center gap-4">
+            <div className="text-xl font-bold">{props.title}</div>
+            <div className="text-sm text-muted-foreground">
+              {props.postDate.toLocaleDateString()},{" "}
+              {props.postDate.toLocaleTimeString()}
+            </div>
+          </div>
           <div className="line-clamp-2">{props.summary}</div>
           <div className="flex items-center gap-2">
             <Avatar>
