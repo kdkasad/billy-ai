@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     const readableStream = new ReadableStream({
       async start(controller) {
         const encoder = new TextEncoder();
-        controller.enqueue(encoder.encode(""));
+        controller.enqueue(encoder.encode(" "));
 
         const { messages } = await request.json();
         const response = await getBill(session.user!.id, messages);
