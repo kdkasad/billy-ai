@@ -25,7 +25,6 @@ export default async function PostPage({
     select: {
       id: true,
       title: true,
-      summary: true,
       postDate: true,
       user: {
         select: {
@@ -45,6 +44,7 @@ export default async function PostPage({
           type: true,
         },
       },
+      fullContents: true,
     },
   });
 
@@ -89,16 +89,16 @@ export default async function PostPage({
           </div>
 
           <div className="mt-6">
-            <Link
-              className={buttonVariants()}
-              href={`/posts/${params.postId}/fullText`}
-            >
-              See full bill text
+            <Link className={buttonVariants()} href={`/posts/${params.postId}`}>
+              See bill summary
               <ScrollTextIcon className="ml-2 size-6" />
             </Link>
           </div>
 
-          <div className="mt-8 max-w-2xl">{bill.summary}</div>
+          <div
+            className="mt-8 max-w-screen-lg overflow-x-auto"
+            dangerouslySetInnerHTML={{ __html: bill.fullContents }}
+          ></div>
         </div>
       </div>
     </div>
