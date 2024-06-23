@@ -11,7 +11,6 @@ interface ChatProps {
 
 export function Chat({ messages, selectedUser, isMobile }: ChatProps) {
   const [systemMessageIndex, setSystemMessageIndex] = React.useState(1);
-  const [renderedThanks, setRenderedThanks] = React.useState(false)
   const [messagesState, setMessages] = React.useState<Message[]>([
     {
       id: 1,
@@ -24,12 +23,34 @@ export function Chat({ messages, selectedUser, isMobile }: ChatProps) {
       avatar: "system",
       name: "system",
       message: systemQuestions[0].example,
-    }
+    },
   ]);
+  const [submitted, setSubmitted] = React.useState(false);
 
-  React.useEffect(() => {
-    console.log(systemMessageIndex)
-    if (!renderedThanks && systemMessageIndex === systemQuestions.length) {
+  const sendMessage = async (newMessage: Message) => {
+    const sysQ: Message[] =
+      systemMessageIndex < systemQuestions.length
+        ? [
+            {
+              id: 1,
+              avatar: "system",
+              name: "system",
+              message: systemQuestions[systemMessageIndex].question,
+            },
+            {
+              id: 2,
+              avatar: "system",
+              name: "system",
+              message: systemQuestions[systemMessageIndex].example,
+            },
+          ]
+        : [];
+    setMessages([...messagesState, newMessage, ...sysQ]);
+    setSystemMessageIndex((prevIndex) => prevIndex + 1);
+
+    // Triggers on conversation finish
+    if (systemMessageIndex >= systemQuestions.length && !submitted) {
+      setSubmitted(true);
       const thankYouMessage: Message = {
         id: 3,
         avatar: "system",
@@ -38,36 +59,16 @@ export function Chat({ messages, selectedUser, isMobile }: ChatProps) {
       };
       setMessages((prevMessages) => [...prevMessages, thankYouMessage]);
       console.log({ messagesState });
+
       const user = selectedUser.name;
       const messages = messagesState;
-      const response = getBill(user, messages);
+      const response = await getBill(user, messages);
       console.log({ response });
-      setRenderedThanks(() => true)
     }
-  }, [messagesState, selectedUser.name, systemMessageIndex]);
-
-  const sendMessage = (newMessage: Message) => {
-    const sysQ: Message[] = systemMessageIndex < systemQuestions.length ? [
-    {
-      id: 1,
-      avatar: "system",
-      name: "system",
-      message: systemQuestions[systemMessageIndex].question,
-    },
-    {
-      id: 2,
-      avatar: "system",
-      name: "system",
-      message: systemQuestions[systemMessageIndex].example,
-    }
-  ] : []
-    setMessages([...messagesState, newMessage, ...sysQ]);
-    setSystemMessageIndex(prevIndex => prevIndex + 1);
   };
 
   return (
     <div className="flex flex-col justify-between w-full h-full">
-
       <ChatList
         messages={messagesState}
         selectedUser={selectedUser}

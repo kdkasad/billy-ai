@@ -15,12 +15,10 @@ export async function getBill(user: string, messages: Message[]) {
     //console.log(synthesis)
     console.log("SYNTHESIS DONE")
     const existing_bills = await getExistingBills(synthesis.message.content!, process.env.PINECONE_NAMESPACE!);
-    //console.log(existing_bills[0].metadata)
-    console.log("EXISTING BILLS FETCHED")
+    console.log({ existing_bills })
     const response = await getBillWithOpenAI(existing_bills, "s", synthesis.message.content!)
-    .then((r) => r.message.content)
-    console.log("FINAL BILL")
-    console.log(response)
+        .then((r) => r.message.content)
+    return response;
     // console.log(`Generating LLM prompt with context`);
     // const prompt = await getLLMPrompt(context);
     // console.log("Prompting LLM...")
