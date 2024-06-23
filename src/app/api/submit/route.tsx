@@ -1,10 +1,8 @@
-"use server";
-
 import { getBill } from "@/app/lib/chain";
-import { getServerSession } from "next-auth";
-import { NextRequest, NextResponse } from "next/server";
-import { authConfig } from "../auth/[...nextauth]/config";
 import prisma from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { NextRequest } from "next/server";
+import { authConfig } from "../auth/[...nextauth]/config";
 // import { createOpenAI } from "@ai-sdk/openai";
 // import { getLLMResponse } from "@/lib/llm";
 
