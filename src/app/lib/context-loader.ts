@@ -58,7 +58,7 @@ export const getExistingBills = async (
     getOnlyText = true
   ) => {
     const embedding = await getEmbeddings(message);
-    const matches = await getMatchesFromEmbeddings(embedding, 3, namespace);
+    const matches = await getMatchesFromEmbeddings(embedding, 1, namespace);
     const qualifyingDocs = matches.filter((m) => m.score && m.score > minScore);
   
     return qualifyingDocs

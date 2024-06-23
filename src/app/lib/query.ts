@@ -68,7 +68,7 @@ export async function generateBillWithBedrock(
       4. Key provisions and regulations
       5. Implementation details or timeline, if applicable
 
-      Please format the bill in a clear, structured manner, similar to actual legislative documents. Ensure that the new bill is relevant to the user's query and takes into account the current events provided.`,
+      Please format the bill in a clear, structured manner, similar to actual legislative documents. Don't make it that long though. Keep it somewhat medium length. Ensure that the new bill is relevant to the user's query and takes into account the current events provided.`,
       max_tokens: 8000,
       temperature: 0.7,
     }),
@@ -115,7 +115,7 @@ export default async function getBillWithOpenAI(
   `;
 
   const prompt = getLLMPrompt(context)
-  console.log(prompt)
+  //console.log(prompt)
   const completion = await openai.chat.completions.create({
     messages: [
         {role: "user", content: prompt}
