@@ -21,23 +21,39 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const { messages } = await request.json();
-    const response = await getBill(session.user.id, messages);
-    console.log("getBill() returns:", response);
-    const dbEntry = await prisma.billPost.create({
-      data: {
-        summary: response.summary,
-        fullContents: response.content,
-        user: { connect: { id: session.user.id } },
-        contentUrl: "",
-        title: response.title,
-      },
-      select: {
-        id: true,
+    const readableStream = new ReadableStream({
+      async start(controller) {
+        const encoder = new TextEncoder();
+        controller.enqueue(encoder.encode(""));
+
+        const { messages } = await request.json();
+        const response = await getBill(session.user!.id, messages);
+        console.log("getBill() returns:", response);
+        const dbEntry = await prisma.billPost.create({
+          data: {
+            summary: response.summary,
+            fullContents: response.content,
+            user: { connect: { id: session.user!.id } },
+            contentUrl: "",
+            title: response.title,
+          },
+          select: {
+            id: true,
+          },
+        });
+        console.log("Bill added to database, id =", dbEntry.id);
+
+        controller.enqueue(
+          encoder.encode(JSON.stringify({ postId: dbEntry.id }))
+        );
+        controller.close();
       },
     });
-    console.log("Bill added to database, id =", dbEntry.id);
-    return NextResponse.json({ postId: dbEntry.id });
+    return new Response(readableStream, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   } catch (error) {
     console.error(error);
     throw new Error("Error: POST request for highlighted text explanation");
