@@ -15,7 +15,10 @@ export default function Page() {
               Description
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Link className={buttonVariants()} href="/api/auth/signin">
+              <Link
+                className={buttonVariants()}
+                href="/api/auth/signin?callbackUrl=/feed"
+              >
                 Sign in
                 <ArrowRight className="ml-2 size-5" />
               </Link>

@@ -72,7 +72,7 @@ function MainNavInternal({ navLinks }: { navLinks: NavLink[] }) {
           ) : (
             <Link
               className={buttonVariants({ variant: "ghost" })}
-              href="/api/auth/signin"
+              href="/api/auth/signin?callbackUrl=/feed"
             >
               Sign in
               <ArrowRight className="ml-2 size-4" />
