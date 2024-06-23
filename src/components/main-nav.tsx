@@ -27,7 +27,6 @@ export default function MainNav() {
 function MainNavInternal() {
   const pathname = usePathname();
   const { data: session } = useSession();
-  console.log(session);
   return (
     <>
       <div className="hidden md:contents">
