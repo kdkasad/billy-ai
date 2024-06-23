@@ -1,5 +1,7 @@
 import { BedrockRuntimeClient, InvokeModelCommand } from "@aws-sdk/client-bedrock-runtime";
 import { defaultProvider } from "@aws-sdk/credential-provider-node";
+import { fetchBillTextVersions, BillTextResponse } from './congress-api';
+import { getNews } from './you-com';
 
 const client = new BedrockRuntimeClient({
   region: "us-east-1", // or your preferred region
@@ -7,13 +9,22 @@ const client = new BedrockRuntimeClient({
 });
 
 export async function generateBillWithBedrock(
-  legislation: string[],
-  currentEvents: string[],
+  congress: string,
+  billType: string,
+  billNumber: string,
+  newsTopic: string,
   userQuery: string
 ) {
+  // Fetch the bill text from Congress.gov API
+  const billTextData: BillTextResponse = await fetchBillTextVersions(congress, billType, billNumber);
+  const billText = billTextData.items?.map(item => item.text).join('\n\n') || 'No bill text available';
+
+  // Fetch the current events using the news topic
+  const currentEvents = await getNews(newsTopic);
+
   const context = `
     Existing Legislation:
-    ${legislation.join('\n\n')}
+    ${billText}
 
     Current Events:
     ${currentEvents.join('\n\n')}
