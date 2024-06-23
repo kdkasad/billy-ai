@@ -11,6 +11,7 @@ interface ChatProps {
 
 export function Chat({ messages, selectedUser, isMobile }: ChatProps) {
   const [systemMessageIndex, setSystemMessageIndex] = React.useState(1);
+  const [renderedThanks, setRenderedThanks] = React.useState(false)
   const [messagesState, setMessages] = React.useState<Message[]>([
     {
       id: 1,
@@ -27,7 +28,8 @@ export function Chat({ messages, selectedUser, isMobile }: ChatProps) {
   ]);
 
   React.useEffect(() => {
-    if (systemMessageIndex > systemQuestions.length) {
+    console.log(systemMessageIndex)
+    if (!renderedThanks && systemMessageIndex === systemQuestions.length) {
       const thankYouMessage: Message = {
         id: 3,
         avatar: "system",
@@ -36,27 +38,11 @@ export function Chat({ messages, selectedUser, isMobile }: ChatProps) {
       };
       setMessages((prevMessages) => [...prevMessages, thankYouMessage]);
       console.log({ messagesState });
-      // fetch("/api/submit", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({
-      //     user: selectedUser.name,
-      //     messages: messagesState,
-      //   }),
-      // })
-      //   .then((response) => response.json())
-      //   .then((data) => {
-      //     console.log(data);
-      //   })
-      //   .catch((error) => {
-      //     throw new Error("Error submitting user form data", error);
-      //   });
       const user = selectedUser.name;
       const messages = messagesState;
       const response = getBill(user, messages);
       console.log({ response });
+      setRenderedThanks(() => true)
     }
   }, [messagesState, selectedUser.name, systemMessageIndex]);
 
