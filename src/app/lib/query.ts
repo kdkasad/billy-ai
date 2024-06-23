@@ -44,5 +44,7 @@ export default async function getBillWithOpenAI(
       ],
     model: 'gpt-3.5-turbo'
   })
+  console.log("INSIDE THE GETBILLWITHOPENAI FUNCTION")
+  console.log(completion.choices[0])
   return completion.choices[0]
 }
