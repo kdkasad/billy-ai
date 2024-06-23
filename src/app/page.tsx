@@ -1,6 +1,4 @@
-import { buttonVariants } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
-import Link from "next/link";
+import ActionButton from "./action-button";
 
 export default function Page() {
   return (
@@ -15,13 +13,7 @@ export default function Page() {
               Description
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Link
-                className={buttonVariants()}
-                href="/api/auth/signin?callbackUrl=/feed"
-              >
-                Sign in
-                <ArrowRight className="ml-2 size-5" />
-              </Link>
+              <ActionButton />
             </div>
           </div>
         </div>
