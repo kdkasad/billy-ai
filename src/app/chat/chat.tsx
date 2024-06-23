@@ -1,6 +1,7 @@
-import { Message, UserData, systemQuestions } from "@/app/data/data"
+import { Message, UserData, systemQuestions } from "@/app/data/data";
 import { ChatList } from "@/app/chat/chat-list";
 import React from "react";
+import { getBill } from "../lib/chain";
 
 interface ChatProps {
   messages?: Message[];
@@ -34,24 +35,28 @@ export function Chat({ messages, selectedUser, isMobile }: ChatProps) {
         message: "Thank you for your conversation!",
       };
       setMessages((prevMessages) => [...prevMessages, thankYouMessage]);
-      console.log(messagesState)
-      fetch("api/submit", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user: selectedUser.name,
-          messages: messagesState,
-        }),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data)
-        })
-        .catch((error) => {
-          throw new Error("Error submitting user form data", error)
-        });
+      console.log({ messagesState });
+      // fetch("/api/submit", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({
+      //     user: selectedUser.name,
+      //     messages: messagesState,
+      //   }),
+      // })
+      //   .then((response) => response.json())
+      //   .then((data) => {
+      //     console.log(data);
+      //   })
+      //   .catch((error) => {
+      //     throw new Error("Error submitting user form data", error);
+      //   });
+      const user = selectedUser.name;
+      const messages = messagesState;
+      const response = getBill(user, messages);
+      console.log({ response });
     }
   }, [systemMessageIndex]);
 
