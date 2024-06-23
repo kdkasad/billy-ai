@@ -12,7 +12,6 @@ export async function generateBillWithBedrock(
   congressList: string[],
   billTypeList: string[],
   billNumberList: string[],
-  newsTopic: string,
   userQuery: string
 ) {
   if (congressList.length !== billTypeList.length || billTypeList.length !== billNumberList.length) {
@@ -29,7 +28,7 @@ export async function generateBillWithBedrock(
   const combinedBillText = billTexts.map((text, index) => `--- Bill ${index + 1} ---\n\n${text}`).join('\n\n');
 
   // Fetch the current events using the news topic
-  const currentEvents = await getNews(newsTopic);
+  const currentEvents = await getNews(userQuery);
 
   const context = `
     Existing Legislation:
