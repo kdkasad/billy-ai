@@ -17,9 +17,6 @@ export interface PostCardProps {
   };
   summary: string;
   votes: number;
-  tag: {
-    name: string;
-  };
   postDate: Date;
   myVote?: {
     id: number;

@@ -35,11 +35,6 @@ export default async function FeedPage({
           image: true,
         },
       },
-      tag: {
-        select: {
-          name: true,
-        },
-      },
       votes: {
         select: {
           id: true,
