@@ -1,15 +1,18 @@
-import { Message, UserData, systemQuestions } from "@/app/data/data";
+"use client";
+
 import { ChatList } from "@/app/chat/chat-list";
+import { Message, systemQuestions } from "@/app/data/data";
+import { Session } from "next-auth";
 import React from "react";
 import { getBill } from "../lib/chain";
 
 interface ChatProps {
   messages?: Message[];
-  selectedUser: UserData;
+  currentUser: Session["user"];
   isMobile: boolean;
 }
 
-export function Chat({ messages, selectedUser, isMobile }: ChatProps) {
+export function Chat({ messages, currentUser, isMobile }: ChatProps) {
   const [systemMessageIndex, setSystemMessageIndex] = React.useState(1);
   const [messagesState, setMessages] = React.useState<Message[]>([
     {
@@ -45,25 +48,42 @@ export function Chat({ messages, selectedUser, isMobile }: ChatProps) {
             },
           ]
         : [];
-    setMessages([...messagesState, newMessage, ...sysQ]);
+    const newMessages = [...messagesState, newMessage, ...sysQ];
+    setMessages(newMessages);
     setSystemMessageIndex((prevIndex) => prevIndex + 1);
 
     // Triggers on conversation finish
     if (systemMessageIndex >= systemQuestions.length && !submitted) {
       setSubmitted(true);
-      const thankYouMessage: Message = {
-        id: 3,
-        avatar: "system",
-        name: "system",
-        message: "Thank you for your conversation!",
-      };
-      setMessages((prevMessages) => [...prevMessages, thankYouMessage]);
+      const thankYouMessages: Message[] = [
+        {
+          id: 3,
+          avatar: "system",
+          name: "system",
+          message: "Thank you for your conversation!",
+        },
+        {
+          id: 3,
+          avatar: "system",
+          name: "system",
+          message:
+            "Generating your bill... Please be patient, as this can take up to a minute.",
+        },
+      ];
+      setMessages((prevMessages) => [...prevMessages, ...thankYouMessages]);
       console.log({ messagesState });
 
-      const user = selectedUser.name;
-      const messages = messagesState;
-      const response = await getBill(user, messages);
-      console.log({ response });
+      fetch("/api/submit", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: newMessages,
+        }),
+      })
+        .then((response) => response.json())
+        .then((responseData) => console.log(responseData));
     }
   };
 
@@ -71,7 +91,6 @@ export function Chat({ messages, selectedUser, isMobile }: ChatProps) {
     <div className="flex flex-col justify-between w-full h-full">
       <ChatList
         messages={messagesState}
-        selectedUser={selectedUser}
         sendMessage={sendMessage}
         isMobile={isMobile}
       />

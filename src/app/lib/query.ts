@@ -13,13 +13,14 @@ interface BillWithAnalysis {
   content: any; // Adjust the type of choice based on actual structure
   title: string;
   rating: string;
+  summary: string;
 }
 
 export async function getBillWithOpenAI(
     bills: ScoredPineconeRecord<RecordMetadata>[],
     billType: "s" | "h",
     userQuery: string
-): Promise<BillWithAnalysis>  {
+): Promise<Omit<BillWithAnalysis, 'summary'>> {
 
     const billTexts = [];
     for (const bill of bills) {
@@ -30,7 +31,7 @@ export async function getBillWithOpenAI(
       billTexts.push(billTextData);
     }
 
-    const combinedBillText = billTexts.map((text, index) => `--- Bill ${index + 1} ---\n\n${text}`).join('\n\n');
+  const combinedBillText = billTexts.map((text, index) => `--- Begin bill ${index + 1} ---\n\n${text}\n\n--- End bill ${index + 1} ---`).join('\n\n');
     const currentEvents = await getNews(userQuery);
 
     const context = `
@@ -54,7 +55,7 @@ export async function getBillWithOpenAI(
   console.log("INSIDE THE GETBILLWITHOPENAI FUNCTION")
   //console.log(completion.choices[0].message)
   //console.log(completion.choices[0].message.content)
-  const ratingAnalyzed = await analyzeText(completion.choices[0].message.content as string) 
+  const ratingAnalyzed = await analyzeText(completion.choices[0].message.content as string)
 
   const startIndex = (completion.choices[0].message.content as string).indexOf('\\title{');
   const endIndex = (completion.choices[0].message.content as string).indexOf('}', startIndex);
@@ -64,8 +65,12 @@ export async function getBillWithOpenAI(
   const ratingStartIndex = ratingAnalyzed.indexOf('Rating: ') + 'Rating: '.length;
   const ratingVal = ratingAnalyzed.substring(ratingStartIndex);
 
+  if (!completion.choices[0].message.content) {
+    throw new Error('No response from AI');
+  }
+
   return {
-    content: completion.choices[0],
+    content: completion.choices[0].message.content,
     title: title,
     rating: ratingVal
   };

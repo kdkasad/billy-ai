@@ -1,25 +1,23 @@
-"use client"
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
-import React, { useEffect, useState } from "react";
 import { userData } from "@/app/data/data";
-import Link from "next/link";
-import { Chat } from "./chat"
+import React from "react";
+import { Chat } from "./chat";
+import { getServerSession } from "next-auth";
+import { authConfig } from "../api/auth/[...nextauth]/config";
+import { redirect } from "next/navigation";
 
-
-export default function Home() {
-  const [selectedUser, setSelectedUser] = React.useState(userData[0]);
+export default async function Home() {
+  const user = getServerSession(authConfig).then((session) => {
+    if (!session || !session.user) {
+      redirect("/api/auth/signin?callbackUrl=/chat");
+    }
+    return session.user;
+  });
 
   return (
     <main className="flex h-[calc(100dvh)] flex-col items-center justify-center p-4 md:px-24 py-32 gap-4">
       <div className="z-10 border rounded-lg max-w-5xl w-full h-full text-sm lg:flex">
-        <Chat
-            messages={selectedUser.messages}
-            selectedUser={selectedUser}
-            isMobile={false}
-        />
+        <Chat currentUser={await user} isMobile={false} />
       </div>
-
     </main>
   );
 }

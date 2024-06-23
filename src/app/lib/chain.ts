@@ -8,20 +8,20 @@ import { getBillWithOpenAI } from "@/app/lib/query";
 
 const openai = new OpenAI();
 
-export async function getBill(user: string, messages: Message[]) {
-    console.log(`init: Generating bill for ${user}`)
+export async function getBill(userId: string, messages: Message[]) {
+    console.log(`init: Generating bill for ${userId}`)
     console.log(`Synthesizing user responses...`)
-    const synthesis = await synthesize(messages)
-    //console.log(synthesis)
+    const synthesis = await synthesize(messages);
+    console.log(synthesis)
     console.log("SYNTHESIS DONE")
-    const existing_bills = await getExistingBills(synthesis.message.content!, process.env.PINECONE_NAMESPACE!);
+    const existing_bills = await getExistingBills(synthesis, process.env.PINECONE_NAMESPACE!);
     console.log({ existing_bills })
-    const response = await getBillWithOpenAI(existing_bills, "s", synthesis.message.content!)
-    const { content, title, rating } = response;
-    console.log({content})
-    console.log({title})
-    console.log({rating})
-    return response;
+    const generatedBill = await getBillWithOpenAI(existing_bills, "s", synthesis)
+    console.log({ generatedBill });
+    return {
+        ...generatedBill,
+        summary: synthesis
+    };
     // console.log(`Generating LLM prompt with context`);
     // const prompt = await getLLMPrompt(context);
     // console.log("Prompting LLM...")

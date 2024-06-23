@@ -1,23 +1,19 @@
-import { Message, UserData } from "@/app/data/data";
+"use client";
+
+import { Message } from "@/app/data/data";
 import { cn } from "@/lib/utils";
 import React, { useRef } from "react";
 // import { Avatar, AvatarImage } from "../ui/avatar";
-import ChatBottombar from "./chat-bottombar";
 import { AnimatePresence, motion } from "framer-motion";
+import ChatBottombar from "./chat-bottombar";
 
 interface ChatListProps {
   messages?: Message[];
-  selectedUser: UserData;
   sendMessage: (newMessage: Message) => void;
   isMobile: boolean;
 }
 
-export function ChatList({
-  messages,
-  selectedUser,
-  sendMessage,
-  isMobile
-}: ChatListProps) {
+export function ChatList({ messages, sendMessage, isMobile }: ChatListProps) {
   const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   React.useEffect(() => {
@@ -55,7 +51,7 @@ export function ChatList({
               }}
               className={cn(
                 "flex flex-col gap-2 p-4 whitespace-pre-wrap",
-                message.name !== selectedUser.name ? "items-end" : "items-start"
+                message.name === "system" ? "items-start" : "items-end"
               )}
             >
               <div className="flex gap-3 items-center">
@@ -67,7 +63,7 @@ export function ChatList({
           ))}
         </AnimatePresence>
       </div>
-      <ChatBottombar sendMessage={sendMessage} isMobile={isMobile}/>
+      <ChatBottombar sendMessage={sendMessage} isMobile={isMobile} />
     </div>
   );
 }

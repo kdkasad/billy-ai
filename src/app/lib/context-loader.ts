@@ -3,7 +3,7 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 import { Message } from "../data/data";
 import OpenAI from "openai";
 import { ChatCompletionMessageParam } from "openai/resources/chat/completions";
-import { SYNTHESIS_PROMPT } from "@/app/lib/prompt-loader"
+import { getSynthesisPrompt } from "@/app/lib/prompt-loader"
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY!,
@@ -14,13 +14,15 @@ export const synthesize = async (messages: Message[]) => {
   console.log(messages.map((m) => ({role: m.name, content: m.message} as ChatCompletionMessageParam)))
   const completion = await openai.chat.completions.create({
     messages: [
-        ...messages.map((m) => ({role: m.name, content: m.message} as ChatCompletionMessageParam)), 
-        {role: "user", content: SYNTHESIS_PROMPT}
+      { role: "system", content: getSynthesisPrompt(messages) }
       ],
     model: 'gpt-3.5-turbo',
     temperature: 0.1,
-  })
-  return completion.choices[0]
+  });
+  if (!completion.choices[0].message.content) {
+    throw new Error('No response from OpenAI');
+  }
+  return completion.choices[0].message.content;
 }
 
 const getEmbeddings = async (message: string) => {
@@ -36,7 +38,7 @@ const getMatchesFromEmbeddings = async (embeddings: number[], topK: number, name
     const pineconeClient = await getPineconeClient();
     const index = await pineconeClient.Index(process.env.PINECONE_INDEX_NAME ?? '');
     const pineconeNamespace = index.namespace(namespace ?? '')
-  
+
     try {
       const queryResult = await pineconeNamespace.query({
         vector: embeddings,
@@ -60,7 +62,6 @@ export const getExistingBills = async (
     const embedding = await getEmbeddings(message);
     const matches = await getMatchesFromEmbeddings(embedding, 1, namespace);
     const qualifyingDocs = matches.filter((m) => m.score && m.score > minScore);
-  
+
     return qualifyingDocs
   };
-  
