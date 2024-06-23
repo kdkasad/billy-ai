@@ -3,16 +3,23 @@ import { getNews } from './you-com';
 import OpenAI from "openai";
 import { ScoredPineconeRecord, RecordMetadata } from "@pinecone-database/pinecone";
 import { getLLMPrompt } from "./prompt-loader";
+import { analyzeText } from "./claude3-query";
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 })
 
+interface BillWithAnalysis {
+  content: any; // Adjust the type of choice based on actual structure
+  title: string;
+  rating: string;
+}
+
 export async function getBillWithOpenAI(
     bills: ScoredPineconeRecord<RecordMetadata>[],
     billType: "s" | "h",
     userQuery: string
-) {
+): Promise<BillWithAnalysis>  {
 
     const billTexts = [];
     for (const bill of bills) {
@@ -45,6 +52,21 @@ export async function getBillWithOpenAI(
     model: 'gpt-3.5-turbo'
   })
   console.log("INSIDE THE GETBILLWITHOPENAI FUNCTION")
-  console.log(completion.choices[0])
-  return completion.choices[0]
+  //console.log(completion.choices[0].message)
+  //console.log(completion.choices[0].message.content)
+  const ratingAnalyzed = await analyzeText(completion.choices[0].message.content as string) 
+
+  const startIndex = (completion.choices[0].message.content as string).indexOf('\\title{');
+  const endIndex = (completion.choices[0].message.content as string).indexOf('}', startIndex);
+  const title = (completion.choices[0].message.content as string).substring(startIndex + '\\title{'.length, endIndex).trim();
+
+
+  const ratingStartIndex = ratingAnalyzed.indexOf('Rating: ') + 'Rating: '.length;
+  const ratingVal = ratingAnalyzed.substring(ratingStartIndex);
+
+  return {
+    content: completion.choices[0],
+    title: title,
+    rating: ratingVal
+  };
 }
