@@ -32,8 +32,8 @@ export async function generateBillWithBedrock(
   const billTexts = await Promise.all(congressList.map(async (congress, index) => {
     const billType = billTypeList[index];
     const billNumber = billNumberList[index];
-    const billTextData: BillTextResponse = await fetchBillTextVersions(congress, billType, billNumber);
-    return billTextData.items?.map(item => item.text).join('\n\n') || 'No bill text available';
+    const billTextData: string = await fetchBillTextVersions(congress, billType, billNumber);
+    return billTextData || 'No bill text available';
   }));
 
   const combinedBillText = billTexts.map((text, index) => `--- Bill ${index + 1} ---\n\n${text}`).join('\n\n');
@@ -96,9 +96,9 @@ export default async function getBillWithOpenAI(
     for (const bill of bills) {
       const congressNumber: string = bill.metadata!['congress-number'].toString();
       const billNumber: string = bill.metadata!['bill-number'].toString();
-      const billTextData: BillTextResponse = await fetchBillTextVersions(congressNumber, billType, billNumber);
-      const billText = billTextData.items?.map(item => item.text).join('\n\n') || 'No bill text available';
-      billTexts.push(billText);
+      const billTextData: string = await fetchBillTextVersions(congressNumber, billType, billNumber);
+      billTextData|| 'No bill text available';
+      billTexts.push(billTextData);
     }
 
     const combinedBillText = billTexts.map((text, index) => `--- Bill ${index + 1} ---\n\n${text}`).join('\n\n');
