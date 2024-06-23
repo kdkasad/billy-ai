@@ -1,3 +1,5 @@
+'use server';
+
 import OpenAI from "openai"
 import { Message } from "../data/data";
 import { synthesize, getExistingBills } from "./context-loader";
@@ -11,7 +13,7 @@ export async function getBill(user: string, messages: Message[]) {
     console.log(`Synthesizing user responses...`)
     const synthesis = await synthesize(messages)
     console.log(synthesis)
-    const existing_bills = await getExistingBills(synthesis.message.content!, process.env.PINECONE_NAMESPACE!); 
+    const existing_bills = await getExistingBills(synthesis.message.content!, process.env.PINECONE_NAMESPACE!);
     console.log(existing_bills[0].metadata)
     const response = await generateBillWithOpenAI(existing_bills, "s", synthesis.message.content!)
     .then((r) => r.message.content)
