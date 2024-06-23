@@ -3,8 +3,6 @@ import { ScrollText } from "lucide-react";
 import { SessionProvider } from "next-auth/react";
 import MainNav from "./main-nav";
 
-const navLinks = [{ name: "Home", href: "/" }];
-
 export default function HeaderBar({ solid = true }: { solid: boolean }) {
   return (
     <header
@@ -16,7 +14,7 @@ export default function HeaderBar({ solid = true }: { solid: boolean }) {
           <span className="font-bold tracking-tight">Billy</span>
         </a>
 
-        <MainNav navLinks={navLinks} />
+        <MainNav />
       </div>
     </header>
   );

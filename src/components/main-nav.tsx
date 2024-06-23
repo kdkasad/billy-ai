@@ -7,25 +7,24 @@ import { usePathname } from "next/navigation";
 import { buttonVariants } from "./ui/button";
 import { SessionProvider, useSession } from "next-auth/react";
 
-export interface NavLink {
-  name: string;
-  href: string;
-}
-
 export interface ActionButtonParams {
   label: string;
   href: string;
 }
 
-export default function MainNav({ navLinks }: { navLinks: NavLink[] }) {
+const landingNavLinks = [{ name: "Home", href: "/" }];
+
+const appNavLinks = [{ name: "Feed", href: "/feed" }];
+
+export default function MainNav() {
   return (
     <SessionProvider>
-      <MainNavInternal navLinks={navLinks} />
+      <MainNavInternal />
     </SessionProvider>
   );
 }
 
-function MainNavInternal({ navLinks }: { navLinks: NavLink[] }) {
+function MainNavInternal() {
   const pathname = usePathname();
   const { data: session } = useSession();
   console.log(session);
@@ -33,7 +32,7 @@ function MainNavInternal({ navLinks }: { navLinks: NavLink[] }) {
     <>
       <div className="hidden md:contents">
         <nav className="flex flex-row items-center gap-6 text-center text-sm">
-          {navLinks.map((link) => {
+          {(session ? appNavLinks : landingNavLinks).map((link) => {
             const active = link.href === pathname;
             return (
               <a
