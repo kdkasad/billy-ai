@@ -14,6 +14,10 @@ export async function generateBillWithBedrock(
   billNumberList: string[],
   userQuery: string
 ) {
+  console.log(congressList)
+  console.log(billTypeList)
+  console.log(billNumberList)
+  
   if (congressList.length !== billTypeList.length || billTypeList.length !== billNumberList.length) {
     throw new Error("The lengths of congress, billType, and billNumber lists must be the same");
   }

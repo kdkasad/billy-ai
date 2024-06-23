@@ -14,16 +14,15 @@ index_name = "billy"
 with open('./docs/processed.json', 'r') as file:
     data = json.load(file)
 
-count = 1393
-for element in data[1393:]:
+count = 0
+for element in data:
     try: 
         title, congress_num, bill_num, summary = element.get('title'), element.get('congress'), element.get('number'), element.get('summary')
-        text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+        text_splitter = CharacterTextSplitter(chunk_size=2000, chunk_overlap=200)
         docs = text_splitter.split_text(summary)
         meta = [{"bill-title": title, "congress-number": congress_num, "bill-number": bill_num}]
         print(f"{count}/{len(data)} embedded")
-        # senate
-        PineconeVectorStore.from_texts(docs, embeddings, namespace=f"{congress_num}.s{bill_num}", metadatas=meta, index_name=index_name)
+        PineconeVectorStore.from_texts(docs, embeddings, namespace=f"senate", metadatas=meta, index_name=index_name)
     except:
         print(f"Skipped {count}")
     count += 1

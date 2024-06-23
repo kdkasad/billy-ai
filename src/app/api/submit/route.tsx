@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getBill } from "@/app/lib/chain"
 // import { createOpenAI } from "@ai-sdk/openai";
 // import { getLLMResponse } from "@/lib/llm";
 export const dynamic = 'force-dynamic' // defaults to auto
@@ -12,7 +13,7 @@ export const dynamic = 'force-dynamic' // defaults to auto
 export async function POST(request: NextRequest) {
     try { 
         const { user, messages } = await request.json();
-        const response = "All good!"
+        const response = getBill(user, messages);
         return NextResponse.json(response);
     }
     catch (error) {

@@ -1,5 +1,4 @@
 import { Message, UserData, systemQuestions } from "@/app/data/data"
-// import ChatTopbar from "./chat-topbar";
 import { ChatList } from "@/app/chat/chat-list";
 import React from "react";
 
@@ -35,9 +34,7 @@ export function Chat({ messages, selectedUser, isMobile }: ChatProps) {
         message: "Thank you for your conversation!",
       };
       setMessages((prevMessages) => [...prevMessages, thankYouMessage]);
-      const userMessages = messagesState.filter((message) => message.name === "user");
       console.log(messagesState)
-      console.log(userMessages)
       fetch("api/submit", {
         method: "POST",
         headers: {
@@ -45,7 +42,7 @@ export function Chat({ messages, selectedUser, isMobile }: ChatProps) {
         },
         body: JSON.stringify({
           user: selectedUser.name,
-          messages: userMessages,
+          messages: messagesState,
         }),
       })
         .then((response) => response.json())
@@ -53,7 +50,7 @@ export function Chat({ messages, selectedUser, isMobile }: ChatProps) {
           console.log(data)
         })
         .catch((error) => {
-          throw new Error("Error submitting user form data")
+          throw new Error("Error submitting user form data", error)
         });
     }
   }, [systemMessageIndex]);

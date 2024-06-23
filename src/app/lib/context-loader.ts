@@ -1,5 +1,26 @@
 import { getPineconeClient } from "@/app/lib/pinecone-client";
 import { OpenAIEmbeddings } from "@langchain/openai";
+import { Message } from "../data/data";
+import OpenAI from "openai";
+import { ChatCompletionMessageParam } from "openai/resources/chat/completions";
+import { SYNTHESIS_PROMPT } from "@/app/lib/prompt-loader"
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY!,
+}
+);
+
+export const synthesize = async (messages: Message[]) => {
+  console.log(messages.map((m) => ({role: m.name, content: m.message} as ChatCompletionMessageParam)))
+  const completion = await openai.chat.completions.create({
+    messages: [
+        ...messages.map((m) => ({role: m.name, content: m.message} as ChatCompletionMessageParam)), 
+        {role: "user", content: SYNTHESIS_PROMPT}
+      ],
+    model: 'gpt-3.5-turbo'
+  })
+  return completion.choices[0]
+}
 
 const getEmbeddings = async (message: string) => {
     const embeddings = new OpenAIEmbeddings({
@@ -28,20 +49,17 @@ const getMatchesFromEmbeddings = async (embeddings: number[], topK: number, name
     }
   }
 
-export const getContext = async (
+export const getExistingBills = async (
     message: string,
     namespace: string,
     maxTokens = 3000,
-    minScore = 0.5,
+    minScore = 0.2,
     getOnlyText = true
   ) => {
     const embedding = await getEmbeddings(message);
     const matches = await getMatchesFromEmbeddings(embedding, 3, namespace);
     const qualifyingDocs = matches.filter((m) => m.score && m.score > minScore);
   
-    let docs = matches
-      ? qualifyingDocs.map((match) => match.metadata?.text)
-      : [];
-    return docs.join("\n").substring(0, maxTokens);
+    return qualifyingDocs
   };
   
