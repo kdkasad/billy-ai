@@ -3,7 +3,7 @@
 import OpenAI from "openai"
 import { Message } from "../data/data";
 import { synthesize, getExistingBills } from "./context-loader";
-import getBillWithOpenAI from "@/app/lib/query";
+import { getBillWithOpenAI } from "@/app/lib/query";
 // import { getLLMPrompt } from "./prompt-loader";
 
 const openai = new OpenAI();

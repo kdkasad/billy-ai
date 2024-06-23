@@ -8,7 +8,7 @@ const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
 })
 
-export default async function getBillWithOpenAI(
+export async function getBillWithOpenAI(
     bills: ScoredPineconeRecord<RecordMetadata>[],
     billType: "s" | "h",
     userQuery: string
