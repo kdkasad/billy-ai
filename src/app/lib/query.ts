@@ -20,7 +20,7 @@ export async function getBillWithOpenAI(
     bills: ScoredPineconeRecord<RecordMetadata>[],
     billType: "s" | "h",
     userQuery: string
-): Promise<Omit<BillWithAnalysis, 'summary'>> {
+): Promise<Omit<BillWithAnalysis, 'title' | 'summary'>> {
 
     const billTexts = [];
     for (const bill of bills) {
@@ -57,11 +57,6 @@ export async function getBillWithOpenAI(
   //console.log(completion.choices[0].message.content)
   const ratingAnalyzed = await analyzeText(completion.choices[0].message.content as string)
 
-  const startIndex = (completion.choices[0].message.content as string).indexOf('\\title{');
-  const endIndex = (completion.choices[0].message.content as string).indexOf('}', startIndex);
-  const title = (completion.choices[0].message.content as string).substring(startIndex + '\\title{'.length, endIndex).trim();
-
-
   const ratingStartIndex = ratingAnalyzed.indexOf('Rating: ') + 'Rating: '.length;
   const ratingVal = ratingAnalyzed.substring(ratingStartIndex);
 
@@ -71,7 +66,6 @@ export async function getBillWithOpenAI(
 
   return {
     content: completion.choices[0].message.content,
-    title: title,
     rating: ratingVal
   };
 }

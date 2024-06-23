@@ -62,7 +62,7 @@ export function Chat({ messages, currentUser, isMobile }: ChatProps) {
           id: 3,
           avatar: "system",
           name: "system",
-          message: "Thank you for your conversation!",
+          message: "Thank you for your input!",
         },
         {
           id: 3,

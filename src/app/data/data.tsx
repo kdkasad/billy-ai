@@ -14,7 +14,7 @@ export const userData = [
     },
 ];
 
-export const systemQuestions = [
+export const systemQuestions = Object.freeze([
   {
     question: "What is the main problem you want to fix?",
     example: "For example: healthcare, education, environment, etc.",
@@ -61,7 +61,11 @@ export const systemQuestions = [
     example:
       "For example: new government office, existing office, local groups, etc.",
   },
-];
+  {
+    question: "Now enter a title for your new bill",
+    example: 'For example: "Free University Act", "Clean Air for Kids", etc.',
+  },
+]);
 
 export type UserData = (typeof userData)[number];
 
