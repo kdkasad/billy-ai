@@ -27,7 +27,7 @@ export const synthesize = async (messages: Message[]) => {
 
 const getEmbeddings = async (message: string) => {
     const embeddings = new OpenAIEmbeddings({
-      apiKey: process.env.OPENAI_API_KEY ?? '',
+      apiKey: process.env.OPENAI_API_KEY!,
       model: "text-embedding-3-large",
     });
     const vectors = await embeddings.embedDocuments([message]);
@@ -36,8 +36,8 @@ const getEmbeddings = async (message: string) => {
 
 const getMatchesFromEmbeddings = async (embeddings: number[], topK: number, namespace: string) => {
     const pineconeClient = await getPineconeClient();
-    const index = await pineconeClient.Index(process.env.PINECONE_INDEX_NAME ?? '');
-    const pineconeNamespace = index.namespace(namespace ?? '')
+  const index = await pineconeClient.Index(process.env.PINECONE_INDEX_NAME!);
+  const pineconeNamespace = index.namespace(namespace)
 
     try {
       const queryResult = await pineconeNamespace.query({

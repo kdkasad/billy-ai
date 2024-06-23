@@ -17,24 +17,25 @@ interface BillWithAnalysis {
 }
 
 export async function getBillWithOpenAI(
-    bills: ScoredPineconeRecord<RecordMetadata>[],
-    billType: "s" | "h",
-    userQuery: string
+  bills: ScoredPineconeRecord<RecordMetadata>[],
+  billType: "s" | "h",
+  userQuery: string
 ): Promise<Omit<BillWithAnalysis, 'title' | 'summary'>> {
 
-    const billTexts = [];
-    for (const bill of bills) {
-      const congressNumber: string = bill.metadata!['congress-number'].toString();
-      const billNumber: string = bill.metadata!['bill-number'].toString();
-      const billTextData: string = await fetchBillTextVersions(congressNumber, billType, billNumber);
-      billTextData|| 'No bill text available';
-      billTexts.push(billTextData);
-    }
+  const billTextPromises = [];
+  bills.map((bill) => { })
+  for (const bill of bills) {
+    const congressNumber: string = bill.metadata!['congress-number'].toString();
+    const billNumber: string = bill.metadata!['bill-number'].toString();
+    const billTextData: Promise<string> = fetchBillTextVersions(congressNumber, billType, billNumber)
+      .then((billTextData) => billTextData || 'No bill text available');
+    billTextPromises.push(billTextData);
+  }
+  const [currentEvents, ...billTexts] = await Promise.all([getNews(userQuery), ...billTextPromises]);
 
   const combinedBillText = billTexts.map((text, index) => `--- Begin bill ${index + 1} ---\n\n${text}\n\n--- End bill ${index + 1} ---`).join('\n\n');
-    const currentEvents = await getNews(userQuery);
 
-    const context = `
+  const context = `
     Existing Legislation:
     ${combinedBillText}
 
@@ -48,8 +49,8 @@ export async function getBillWithOpenAI(
   //console.log(prompt)
   const completion = await openai.chat.completions.create({
     messages: [
-        {role: "user", content: prompt}
-      ],
+      { role: "user", content: prompt }
+    ],
     model: 'gpt-3.5-turbo'
   })
   console.log("INSIDE THE GETBILLWITHOPENAI FUNCTION")
