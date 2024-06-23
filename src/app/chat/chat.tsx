@@ -25,7 +25,7 @@ export function Chat({ messages, selectedUser, isMobile }: ChatProps) {
       message: systemQuestions[0].example,
     }
   ]);
-  
+
   React.useEffect(() => {
     if (systemMessageIndex > systemQuestions.length) {
       const thankYouMessage: Message = {
@@ -58,7 +58,7 @@ export function Chat({ messages, selectedUser, isMobile }: ChatProps) {
       const response = getBill(user, messages);
       console.log({ response });
     }
-  }, [systemMessageIndex]);
+  }, [messagesState, selectedUser.name, systemMessageIndex]);
 
   const sendMessage = (newMessage: Message) => {
     const sysQ: Message[] = systemMessageIndex < systemQuestions.length ? [
