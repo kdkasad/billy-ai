@@ -9,22 +9,31 @@ const client = new BedrockRuntimeClient({
 });
 
 export async function generateBillWithBedrock(
-  congress: string,
-  billType: string,
-  billNumber: string,
+  congressList: string[],
+  billTypeList: string[],
+  billNumberList: string[],
   newsTopic: string,
   userQuery: string
 ) {
-  // Fetch the bill text from Congress.gov API
-  const billTextData: BillTextResponse = await fetchBillTextVersions(congress, billType, billNumber);
-  const billText = billTextData.items?.map(item => item.text).join('\n\n') || 'No bill text available';
+  if (congressList.length !== billTypeList.length || billTypeList.length !== billNumberList.length) {
+    throw new Error("The lengths of congress, billType, and billNumber lists must be the same");
+  }
+
+  const billTexts = await Promise.all(congressList.map(async (congress, index) => {
+    const billType = billTypeList[index];
+    const billNumber = billNumberList[index];
+    const billTextData: BillTextResponse = await fetchBillTextVersions(congress, billType, billNumber);
+    return billTextData.items?.map(item => item.text).join('\n\n') || 'No bill text available';
+  }));
+
+  const combinedBillText = billTexts.map((text, index) => `--- Bill ${index + 1} ---\n\n${text}`).join('\n\n');
 
   // Fetch the current events using the news topic
   const currentEvents = await getNews(newsTopic);
 
   const context = `
     Existing Legislation:
-    ${billText}
+    ${combinedBillText}
 
     Current Events:
     ${currentEvents.join('\n\n')}
