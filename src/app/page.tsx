@@ -10,7 +10,7 @@ export default function Page() {
               Create and share your own legislation.
             </h1>
             <p className="mx-auto mt-6 max-w-xl text-balance text-xl font-light leading-8 tracking-wide text-muted-foreground">
-              Description
+              Create, share, and vote on your own laws. Make your voice heard.
             </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <ActionButton />
