@@ -1,8 +1,3 @@
-import fetch from 'node-fetch';
-import dotenv from 'dotenv';
-
-dotenv.config();
-
 const CONGRESS_API_BASE_URL = 'https://api.congress.gov/v3';
 
 export interface BillTextItem {
