@@ -17,7 +17,8 @@ export const synthesize = async (messages: Message[]) => {
         ...messages.map((m) => ({role: m.name, content: m.message} as ChatCompletionMessageParam)), 
         {role: "user", content: SYNTHESIS_PROMPT}
       ],
-    model: 'gpt-3.5-turbo'
+    model: 'gpt-3.5-turbo',
+    temperature: 0.1,
   })
   return completion.choices[0]
 }

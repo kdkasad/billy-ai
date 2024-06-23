@@ -60,5 +60,14 @@ Based on these interactions, generate a synthesis that captures the user's main 
 
 
 export function getLLMPrompt(context: string | ScoredVector[]) {
-    
+    return (`You are an expert legislative assistant. Your task is to create a new bill based on the following information:
+        INFORMATION START
+      ${context}
+        INFORMATION END
+      Using the existing legislation as reference, considering the current events, and addressing the user's query, draft a new bill that addresses
+      the user's concerns.
+      Ensure that the new bill is relevant to the user's query and takes into account the current events provided.
+      The structure of the bill should follow the exact format of the official bills created in the House of Representatives and Senate.
+      Output the bill in LaTeX format.
+      `)
 }
