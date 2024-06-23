@@ -13,6 +13,9 @@ import prisma from "@/lib/prisma";
 // });
 // const model = openai("gpt-3.5-turbo")
 
+export const dynamic = "force-dynamic";
+export const maxDuration = 60;
+
 export async function POST(request: NextRequest) {
   const session = await getServerSession(authConfig);
   if (!session || !session.user?.id) {
