@@ -3,8 +3,8 @@
 import { ChatList } from "@/app/chat/chat-list";
 import { Message, systemQuestions } from "@/app/data/data";
 import { Session } from "next-auth";
+import { useRouter } from "next/navigation";
 import React from "react";
-import { getBill } from "../lib/chain";
 
 interface ChatProps {
   messages?: Message[];
@@ -13,6 +13,7 @@ interface ChatProps {
 }
 
 export function Chat({ messages, currentUser, isMobile }: ChatProps) {
+  const router = useRouter();
   const [systemMessageIndex, setSystemMessageIndex] = React.useState(1);
   const [messagesState, setMessages] = React.useState<Message[]>([
     {
@@ -83,7 +84,10 @@ export function Chat({ messages, currentUser, isMobile }: ChatProps) {
         }),
       })
         .then((response) => response.json())
-        .then((responseData) => console.log(responseData));
+        .then((responseData) => {
+          const postId = responseData.postId;
+          router.push(`/posts/${postId}`);
+        });
     }
   };
 

@@ -74,6 +74,7 @@ model BillPost {
   postDate DateTime @map("post_date") @default(now())
   title String
   summary String @db.Text
+  fullContents String @db.Text @map("full_contents")
   contentUrl String @map("content_url")
   votes Vote[]
 
@@ -81,7 +82,7 @@ model BillPost {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   tagId Int @map("tag_id")
-  tag Tag @relation(fields: [tagId], references: [id])
+  tag Tag? @relation(fields: [tagId], references: [id])
 
   @@map("bill_posts")
 }

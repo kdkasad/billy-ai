@@ -4,6 +4,7 @@ import { getBill } from "@/app/lib/chain";
 import { getServerSession } from "next-auth";
 import { NextRequest, NextResponse } from "next/server";
 import { authConfig } from "../auth/[...nextauth]/config";
+import prisma from "@/lib/prisma";
 // import { createOpenAI } from "@ai-sdk/openai";
 // import { getLLMResponse } from "@/lib/llm";
 
@@ -23,7 +24,20 @@ export async function POST(request: NextRequest) {
     const { messages } = await request.json();
     const response = await getBill(session.user.id, messages);
     console.log("getBill() returns:", response);
-    return NextResponse.json(response);
+    const dbEntry = await prisma.billPost.create({
+      data: {
+        summary: response.summary,
+        fullContents: response.content,
+        user: { connect: { id: session.user.id } },
+        contentUrl: "",
+        title: response.title,
+      },
+      select: {
+        id: true,
+      },
+    });
+    console.log("Bill added to database, id =", dbEntry.id);
+    return NextResponse.json({ postId: dbEntry.id });
   } catch (error) {
     console.error(error);
     throw new Error("Error: POST request for highlighted text explanation");
