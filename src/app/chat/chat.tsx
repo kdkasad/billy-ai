@@ -2,6 +2,7 @@
 
 import { ChatList } from "@/app/chat/chat-list";
 import { Message, systemQuestions } from "@/app/data/data";
+import { readSync } from "fs";
 import { Session } from "next-auth";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -69,6 +70,13 @@ export function Chat({ messages, currentUser, isMobile }: ChatProps) {
           name: "system",
           message:
             "Generating your bill... Please be patient, as this can take up to a minute.",
+        },
+        {
+          id: 3,
+          avatar: "system",
+          name: "system",
+          message:
+            "You will be automatically redirected to your new bill once it's ready.",
         },
       ];
       setMessages((prevMessages) => [...prevMessages, ...thankYouMessages]);
