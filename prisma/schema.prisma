@@ -9,8 +9,8 @@ datasource db {
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String  @map("user_id")
+  id                 Int  @id @default(autoincrement())
+  userId             Int  @map("user_id")
   type               String
   provider           String
   providerAccountId  String  @map("provider_account_id")
@@ -29,9 +29,9 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  id           Int   @id @default(autoincrement())
   sessionToken String   @unique @map("session_token")
-  userId       String   @map("user_id")
+  userId       Int   @map("user_id")
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -39,13 +39,14 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            Int    @id @default(autoincrement())
   name          String?
   email         String?   @unique
   emailVerified DateTime? @map("email_verified")
   image         String?
   accounts      Account[]
   sessions      Session[]
+  posts         BillPost[]
 
   @@map("users")
 }
@@ -57,4 +58,28 @@ model VerificationToken {
 
   @@unique([identifier, token])
   @@map("verificationtokens")
+}
+
+model Tag {
+  id Int @id @default(autoincrement())
+  name String
+  posts BillPost[]
+
+  @@map("tags")
+}
+
+model BillPost {
+  id Int @id @default(autoincrement())
+  postDate DateTime @map("post_date") @default(now())
+  title String
+  summary String @db.Text
+  contentUrl String @map("content_url")
+
+  userId Int @map("user_id")
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  tagId Int @map("tag_id")
+  tag Tag @relation(fields: [tagId], references: [id])
+
+  @@map("bill_posts")
 }
