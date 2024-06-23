@@ -20,7 +20,6 @@ export default function Home() {
         />
       </div>
 
-      <div className="flex justify-between max-w-5xl w-full items-start text-xs md:text-sm text-muted-foreground "/>
     </main>
   );
 }

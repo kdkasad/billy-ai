@@ -14,7 +14,7 @@ export interface ActionButtonParams {
 
 const landingNavLinks = [{ name: "Home", href: "/" }];
 
-const appNavLinks = [{ name: "Feed", href: "/feed" }];
+const appNavLinks = [{ name: "Feed", href: "/feed" }, { name: "Write", href: "/chat"}];
 
 export default function MainNav() {
   return (
