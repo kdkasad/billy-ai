@@ -10,7 +10,7 @@ export async function analyzeText(text: string): Promise<string> {
     FORMAT STARTS HERE
     Rating: INSERT RATING HERE
     FORMAT ENDS HERE
-    DO NOT WRITE A SINGLE OTHER THING OTHER THAN THE SPECIFIED FORMAT
+    DO NOT WRITE ANYTHING OTHER THAN THE SPECIFIED FORMAT
 
     TEXT: "${text}"`;
 
