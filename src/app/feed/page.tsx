@@ -14,7 +14,7 @@ export default async function FeedPage({
 }) {
   const session = await getServerSession(authConfig);
   if (!session) {
-    redirect("/api/auth/signin?callbackUrl=/feed");
+    redirect("/signin?next=/feed");
   }
 
   const rank: Rank = searchParams?.rank ?? "new";

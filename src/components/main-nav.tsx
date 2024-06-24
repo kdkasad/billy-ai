@@ -70,7 +70,7 @@ function MainNavInternal() {
           ) : (
             <Link
               className={buttonVariants({ variant: "ghost" })}
-              href="/api/auth/signin?callbackUrl=/feed"
+              href="/signin"
             >
               Sign in
               <ArrowRight className="ml-2 size-4" />

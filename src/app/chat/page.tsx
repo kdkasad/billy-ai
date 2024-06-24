@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 export default async function Home() {
   const user = getServerSession(authConfig).then((session) => {
     if (!session || !session.user) {
-      redirect("/api/auth/signin?callbackUrl=/chat");
+      redirect("/signin?next=/chat");
     }
     return session.user;
   });

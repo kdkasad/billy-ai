@@ -24,10 +24,7 @@ function ActionButtonInternal() {
     );
   } else {
     return (
-      <Link
-        className={buttonVariants()}
-        href="/api/auth/signin?callbackUrl=/feed"
-      >
+      <Link className={buttonVariants()} href="/signin">
         Sign in
         <ArrowRight className="ml-2 size-5" />
       </Link>
