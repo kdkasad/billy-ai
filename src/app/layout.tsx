@@ -1,7 +1,5 @@
 import HeaderBar from "@/components/header-bar";
 import type { Metadata } from "next";
-import { Session } from "next-auth";
-import { SessionProvider } from "next-auth/react";
 import { Inter } from "next/font/google";
 import "./globals.css";
 

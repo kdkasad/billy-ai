@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
 import { ScrollText } from "lucide-react";
-import { SessionProvider } from "next-auth/react";
 import MainNav from "./main-nav";
 
 export default function HeaderBar({ solid = true }: { solid: boolean }) {

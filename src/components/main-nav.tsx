@@ -62,7 +62,7 @@ function MainNavInternal() {
           {session ? (
             <Link
               className={buttonVariants({ variant: "ghost" })}
-              href="/api/auth/signout?callbackUrl=/"
+              href="/signout"
             >
               Sign out
               <LogOut className="ml-2 size-4" />
